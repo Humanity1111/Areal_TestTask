@@ -4,9 +4,9 @@
     <ul>
       <li v-for="article in articles" :key="article.id">
         <strong>{{ article.title }}</strong>
-        <button @click="editArticle(article)">Edit</button>
-        <button @click="deleteArticle(article.id)">Delete</button>
+        <button @click="editArticle(article.id)">Edit</button>
         <button @click="viewArticle(article.id)">View</button>
+        <button @click="deleteArticle(article.id)">Delete</button>
       </li>
     </ul>
   </div>
@@ -14,6 +14,7 @@
 
 <script>
 import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -32,11 +33,11 @@ export default {
         alert('Error fetching articles: ' + err);
       }
     },
-    editArticle(article) {
-      this.$emit('edit', article);
+    editArticle(id) {
+      this.$router.push({ name: 'ArticleView', params: { id } });
     },
     viewArticle(id) {
-      this.$emit('view', id);
+      this.$router.push({ name: 'ArticleView', params: { id } });
     },
     async deleteArticle(id) {
       if (confirm('Delete this article?')) {
@@ -51,3 +52,16 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  margin-bottom: 10px;
+}
+button {
+  margin-left: 5px;
+}
+</style>

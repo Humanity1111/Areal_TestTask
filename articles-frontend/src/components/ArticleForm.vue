@@ -1,16 +1,16 @@
 <template>
   <div>
-    <h2>{{ article.id ? 'Edit Article' : 'New Article' }}</h2>
+    <h2>{{ localArticle.id ? 'Edit Article' : 'New Article' }}</h2>
     <form @submit.prevent="submit">
       <div>
         <label>Title:</label>
-        <input v-model="article.title" required />
+        <input v-model="localArticle.title" required />
       </div>
       <div>
         <label>Text:</label>
-        <textarea v-model="article.text" required></textarea>
+        <textarea v-model="localArticle.text" required></textarea>
       </div>
-      <button type="submit">{{ article.id ? 'Update' : 'Create' }}</button>
+      <button type="submit">{{ localArticle.id ? 'Update' : 'Create' }}</button>
     </form>
   </div>
 </template>
@@ -25,16 +25,22 @@ export default {
       default: () => ({ title: '', text: '' })
     }
   },
+  data() {
+    return {
+      localArticle: { ...this.article } // создаём локальную копию
+    };
+  },
   methods: {
     async submit() {
       try {
-        if (this.article.id) {
-          const res = await axios.patch(`http://localhost:3000/article/${this.article.id}`, this.article);
+        if (this.localArticle.id) {
+          await axios.patch(`http://localhost:3000/article/${this.localArticle.id}`, this.localArticle);
           alert('Article updated');
         } else {
-          const res = await axios.post('http://localhost:3000/article', this.article);
+          await axios.post('http://localhost:3000/article', this.localArticle);
           alert('Article created');
         }
+        this.$emit('articleSaved');
       } catch (err) {
         alert('Error: ' + err);
       }

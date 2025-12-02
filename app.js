@@ -1,11 +1,14 @@
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const { Article, Comment } = require('./models');
 const { Op } = require('sequelize');
 
 const app = express();
-app.use(bodyParser.json());
 const port = 3000;
+
+app.use(cors());
+app.use(bodyParser.json());
 
 app.post('/article', async (req, res) => {
   const { title, text } = req.body;
@@ -128,4 +131,4 @@ app.get('/analytic/comments', async (req, res) => {
   }
 });
 
-app.listen(port, () => console.log(`Server running on port ${port}`));
+app.listen(port, '0.0.0.0', () => console.log(`Server running on port ${port}`));
